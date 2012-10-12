@@ -226,3 +226,103 @@ h
 			p
 			q
 			(- count 1)))))
+
+;E1.20
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+;正则序
+(gcd 206 40)
+(gcd 40 (remainder 206 40))
+(gcd (remainder 206 40 ) (remainder 40 (remainder 206 40)))
+(gcd (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))
+......
+;增长应该是1,3,6,10次,共20次.
+;应用序
+(gcd 206 40)
+(gcd 40 6)
+;4次,参考答案的来源结果是5次,这里应该是4次.看它的运算是有一步多余的.
+;E1.21
+(define (smallest-divisor n)
+  (find-divisor n 2))
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+	((divides? test-divisor n) test-divisor)
+	(else (find-divisor n (+ test-divisor 1)))))
+
+(define (divides? a b)
+  (= (remainder b a) 0))
+(define (prime? n)
+  (= n (smallest-divisor n)))
+
+;E1.22
+(define (timed-prime-test n)
+;  (newline)
+;  (display n)
+;  (display (runtime))
+  (start-prime-test n (runtime)))
+(define (start-prime-test n start-time)
+  (if (prime? n)
+      (report-prime (- (runtime) start-time))
+      (= 1 2)))
+(define (report-prime elapsed-time)
+  (display " *** ")
+  (display elapsed-time)
+  (= 1 1))
+  
+
+(define (search-for-primes a b)
+  (cond ((= b 0) 0)
+      (else
+       (if (timed-prime-test a)
+	   (search-for-primes(+ a 1) (- b 1))
+	   (search-for-primes(+ a 1) b)))))
+
+;根据参考答案来源,runtime新版为秒,改为real-time-clock
+(define (runtime )
+  (real-time-clock))
+;简单计算了,貌似比n**1/2的性能差一点.
+;E1.23
+
+(define (next n)
+  (if (= n 2)
+      3
+      (+ n 2)
+      )
+  )
+
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+	((divides? test-divisor n) test-divisor)
+	(else (find-divisor n (next test-divisor)))))
+;增长上没有达到1/2的优化量.
+
+
+;E1.24
+
+(define (fermat-test n)
+  (define (try-it a)
+    (= (expmod a n n) a))
+  (try-it (+ 1 (random (- n 1)))))
+
+(define (fast-prime? n times)
+  (cond ((= times 0) true)
+	((fermat-test n)(fast-prime? n (- times 1)))
+	(else false)))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+	((even? exp)
+	 (remainder (square (expmod base (/ exp 2) m))
+		    m))
+	(else
+	 (remainder (* base (expmod base (- exp 1) m))
+		    m))))
+(define (start-prime-test n start-time)
+  (if (fast-prime? n 100)
+      (report-prime (- (runtime) start-time))
+      (= 1 2)))
+
+;E1.25
+
