@@ -367,7 +367,7 @@ h
 
 
 
-E1.30
+;E1.30
 (define (sum term a next b)
   (if (> a b)
       0
