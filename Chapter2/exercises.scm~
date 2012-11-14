@@ -1,0 +1,114 @@
+;实例2.1.1
+(define (add-rat x y)
+  (make-rat (+ (* (number x) (denom y))
+               (* (number y) (denom x)))
+            (* (denom x) (denom y))))
+
+(define (sub-rat x y)
+  (make-rat (- (* (number x) (denom y))
+               (* (number y) (denom x)))
+            (* (denom x) (denom y))))
+
+(define (mul-rat x y)
+  (make-rat (* (number x) (number y))
+            (* (denom x) (denom y))))
+
+(define (div-rat x y)
+  (make-rat (* (number x) (denom y))
+            (* (denom x) (number y))))
+
+(define (equal-rat? x y)
+  (= (* (number x) (denom y))
+     (* (number y) (denom x))))
+
+(define (make-rat n d) (cons n d))
+(define (number x)(car x))
+(define (denom x) (cdr x))
+(define (print-rat x)
+  (newline)
+  (display (number x))
+  (display "/")
+  (display (denom x)))
+
+(define (make-rat n d)
+  (let ((g (gcd n d)))
+    (cons (/ n g) (/ d g))))
+(define (make-rat n d)
+  (let ((g (gcd n d)))
+    (cons (/ n g) (/ d g))))
+;E 2.1
+(define (make-rat n d)
+  (let ((g (gcd n d)))
+    (if (< (* n d) 0)
+        (cons (- 0 (abs (/ n g))) (abs (/ d g)))
+        (cons (abs (/ n g)) (abs (/ d g))))))
+
+
+
+
+(define a (make-rat 3 -10))
+(define b (make-rat 1 10))
+(print-rat (add-rat a b))
+(add-rat a b)
+
+;E 2.2
+
+(define (make-segment p0 p1)
+  (cons p0 p1))
+
+(define (start-segment seg)
+  (car seg))
+(define (end-segment seg)
+  (cdr seg))
+
+(define (make-point x y)
+  (cons x y))
+(define (x-point p)
+  (car p))
+(define (y-point p)
+  (cdr p))
+
+(define (midpoint-segment seg)
+  (let ((p0 (start-segment seg))
+        (p1 (end-segment seg)))
+    (make-point (/ (+ (x-point p0) (x-point p1)) 2)
+                (/ (+ (y-point p0) (y-point p1)) 2))))
+
+(midpoint-segment (make-segment (make-point 1 5) (make-point 5 13)))
+
+;E 2.3
+;定义获得长宽的方法，计算
+;方法，可以是4线段，两点等等表示方法。
+
+;E 2.4
+;Church Encode 的典型
+
+;E 2.5
+(define (cons a b)
+  (* (expt 2 a)
+     (expt 3 b)))
+(define (car z)
+    (if (= 0 (remainder z 2))
+        (+ 1 (car (/ z 2)))
+        0))
+(define (cdr z)
+    (if (= 0 (remainder z 3))
+        (+ 1 (cdr (/ z 3)))
+        0))
+(cdr (cons 3 5))
+
+;2.6 
+;邱奇数
+
+
+;E 2.7
+(define (upper-bound x)
+  (car x))
+(define (lower-bound x)
+  (cdr x))
+
+;E 2.8
+(define (sub-interval a b)
+  (make-interval (
+                  (- (lower-bound a) (upper-bound b))
+                  (- (uppper-bound a) (lower-bound b)))))

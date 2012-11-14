@@ -1,0 +1,5 @@
+;实例2.1.1
+(define (add-rat x y)
+  (make-rat (+ (* (number x) (denom y))
+               (* (number y) (denom x)))
+            (* (denom x) (denom y))))
